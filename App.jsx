@@ -120,7 +120,7 @@ export default function App() {
             }`}
           >
             <Rocket size={20} className={isLaunching ? 'animate-bounce' : ''} />
-            <span className="text-[10px] uppercase tracking-tighter">{isLaunching ? '中止' : '点火'}</span>
+            <span className="text-[10px] uppercase tracking-tighter">{isLaunching ? '燃焼終了' : '点火'}</span>
           </button>
 
           <button 

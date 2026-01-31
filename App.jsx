@@ -75,7 +75,7 @@ export default function App() {
       {/* Telemetry Panel */}
       <div className="md:w-1/3 w-full mb-8 md:mb-0 md:mr-12 flex flex-col items-start space-y-4 z-20">
         <div>
-          <h1 className="text-3xl font-black bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500 bg-clip-text text-transparent mb-1 not-italic tracking-tighter uppercase">
+          <h1 className="text-3xl font-black bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500 bg-clip-text text-transparent mb-1 not-italic tracking-tighter uppercase text-left">
             多段式ハイブリッドロケット
           </h1>
           <p className="text-slate-500 text-[10px] font-mono tracking-[0.3em]">内部構造とシーケンス</p>
@@ -93,7 +93,7 @@ export default function App() {
                   <Scan size={16} className="text-cyan-500" />
                   <h3 className="text-lg font-bold text-white border-l-4 border-cyan-500 pl-3">{activePart.name}</h3>
                 </div>
-                <p className="text-sm text-slate-400 leading-relaxed font-light">{activePart.description}</p>
+                <p className="text-sm text-slate-400 leading-relaxed font-light text-left">{activePart.description}</p>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-6 px-4 bg-slate-950/50 border border-slate-800 rounded-lg group">
@@ -186,16 +186,19 @@ export default function App() {
             </radialGradient>
           </defs>
 
-          {/* Stage 1 */}
+          {/* Stage 1 (落下アニメーション) */}
           <g className={`transition-all duration-[4000ms] ease-out ${isSeparated ? 'translate-y-[400px] opacity-0 pointer-events-none' : ''}`}>
             {isLaunching && !isSeparated && (
               <path d="M 105 440 Q 120 500 135 440 Z" fill="url(#igniteFlame)" className="animate-pulse" />
             )}
+            
+            {/* 1段目用パラシュート（分離時に展開） */}
+            <Parachute x={120} y={235} color="#ef4444" scale={1.2} visible={isSeparated} />
+
             <SectionalOxidizerTank x={90} y={255} width={60} height={80} onClick={() => setActivePart(parts.find(p => p.id==='stage1-tank'))} />
             <SectionalSolidFuel x={90} y={335} width={60} height={70} onClick={() => setActivePart(parts.find(p => p.id==='stage1-fuel'))} />
             <rect x="90" y="235" width="60" height="20" fill="#1e293b" stroke="#475569" onClick={() => setActivePart(parts.find(p => p.id==='interstage'))} className="cursor-pointer" />
             
-            {/* メインノズル */}
             <path 
               d="M 105 405 L 90 440 L 150 440 L 135 405 Z" 
               fill="#0f172a" stroke="#475569" 
@@ -203,7 +206,6 @@ export default function App() {
               onClick={() => setActivePart(parts.find(p => p.id==='stage1-nozzle'))}
             />
             
-            {/* 空力安定翼 (フィン) */}
             <g className="cursor-pointer" onClick={() => setActivePart(parts.find(p => p.id==='fins'))}>
               <path d="M 90 385 L 60 435 L 90 420 Z" fill="#bef264" fillOpacity="0.6" stroke="#65a30d" className="hover:fill-opacity-100" />
               <path d="M 150 385 L 180 435 L 150 420 Z" fill="#bef264" fillOpacity="0.6" stroke="#65a30d" className="hover:fill-opacity-100" />
@@ -218,7 +220,6 @@ export default function App() {
             <SectionalOxidizerTank x={90} y={120} width={60} height={50} onClick={() => setActivePart(parts.find(p => p.id==='stage2-tank'))} />
             <SectionalSolidFuel x={90} y={170} width={60} height={40} onClick={() => setActivePart(parts.find(p => p.id==='stage2-fuel'))} />
             
-            {/* 2段目ノズル */}
             <path 
               d="M 105 210 L 95 235 L 145 235 L 135 210 Z" 
               fill="#1e293b" stroke="#475569" 
@@ -227,6 +228,8 @@ export default function App() {
             />
             
             <path d="M 90 50 L 90 40 Q 90 10 120 10 Q 150 10 150 40 L 150 50 Z" fill="url(#bodyGradient)" stroke="#475569" onClick={() => setActivePart(parts.find(p => p.id==='nose-cone'))} className="cursor-pointer" />
+            
+            {/* フェアリング内パラシュート */}
             <Parachute x={120} y={10} color="#0ea5e9" scale={1.1} visible={isDoorOpen} />
             <rect x="90" y="50" width="60" height="70" fill="#020617" stroke="#334155" />
             
@@ -237,6 +240,7 @@ export default function App() {
             >
               <rect x="110" y="75" width="20" height="20" rx="3" fill="#6366f1" stroke="#818cf8" />
               <rect x="102" y="82" width="36" height="6" rx="1" fill="#2dd4bf" opacity="0.8" />
+              {/* ローバー用小型パラシュート */}
               <Parachute x={120} y={75} color="#fbbf24" scale={0.4} visible={isDoorOpen} />
             </g>
 
